@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development"
+    "test": "jest",
+    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "build": "echo \"Error: no build configuration yet\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sam Purcell",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -16,14 +17,31 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.5",
     "dotenv": "^6.2.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "jest": "^23.6.0",
     "react-hot-loader": "^4.6.3",
+    "react-test-renderer": "^16.7.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
+    "@material-ui/core": "^3.9.0",
+    "@material-ui/icons": "^3.0.2",
+    "@material-ui/styles": "^3.0.0-alpha.8",
+    "apollo-cache-inmemory": "^1.4.2",
+    "apollo-client": "^2.4.12",
+    "apollo-link": "^1.2.6",
+    "apollo-link-error": "^1.1.5",
+    "apollo-link-http": "^1.5.9",
+    "apollo-link-retry": "^2.2.8",
     "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
     "react": "^16.7.0",
+    "react-apollo": "^2.4.0",
     "react-dom": "^16.7.0"
   }
 }

@@ -1,3 +1,5 @@
+// These are some basic presets for babel for Node and React.
+// The plugin gives us to access to functionality for class properties that's not in core babel.
 {
   "presets": [
     "@babel/preset-env",

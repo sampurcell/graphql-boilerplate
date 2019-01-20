@@ -1,7 +1,7 @@
 // Even though it's a stateless, functional component, you still need react for the JSX
 import React from 'react';
 
-import Repository from './Repository';
+import Repository from '../Repository/Repository';
 
 const Organization = ({ organization, errors, onFetchMoreItems, onFavorite }) => {
   if (errors) {
