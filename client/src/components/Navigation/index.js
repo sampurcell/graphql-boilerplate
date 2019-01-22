@@ -1,5 +1,19 @@
+/**
+ * Import React and PropTypes as we do.
+ */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
+/**
+ * @todo - Style this with MaterialUI
+ * Handles links to external sources or to another component within the React app
+ */
+import { Link } from 'react-router-dom';
+
+/**
+ * Import the classnames package for some support joining classnames.
+ */
+import classNames from 'classnames';
 
 /**
  * Css-in-js helper for React and MaterialUI
@@ -24,30 +38,41 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 /**
+ * Import routes here as well so Navigation component can display the links.
+ */
+import * as routes from '../../constants/routes';
+
+/**
  * Create some default styles
  * The 'root' style is provided by material-ui. It allows you to add styles to the root element.
  * You can add a bunch of other style objects as well.
  */
 const styles = {
-  root: {
-    flexGrow: 1,
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
+ root: {
+   flexGrow: 1,
+ },
+ grow: {
+   flexGrow: 1,
+ },
+ menuButton: {
+   marginLeft: -12,
+   marginRight: 20,
+ },
 };
 
 /**
- * Create a Header React component class
- * that keeps track of the user's authentication status,
+ * Our navigation component.
+ * Its a dumb component for now.
+ *
+ * @todo - Refactor this in some way so it has access to the viewer data that is returned.
  */
-class Header extends Component {
+class Navigation extends Component {
+  /**
+   * Internal state for class. We don't need a constructor because of new ES syntax.
+   * isLoggedIn is always false until we access the viewer object.
+   */
   state = {
-    isLoggedIn: !!this.props.viewer,
+    isLoggedIn: true,
     anchorEl: null,
   };
 
@@ -65,18 +90,13 @@ class Header extends Component {
     this.setState({ anchorEl: null });
   };
 
-  /**
-   * Render the header bar.
-   * Show authentication options if user is not authenticated.
-   * Show a profile icon if they are.
-   */
   render() {
-    const { classes, viewer } = this.props;
+    const { classes } = this.props;
     const { isLoggedIn, anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
-      <div className={classes.root}>
+      <header className={classNames(classes.root, "navigation-container")}>
         <AppBar position="static">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
@@ -109,8 +129,9 @@ class Header extends Component {
                   open={open}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  {/* @todo - Update Link somehow to use the MenuItem component prop */}
+                  <MenuItem onClick={this.handleClose}><Link to={routes.PROFILE}>Profile</Link></MenuItem>
+                  <MenuItem onClick={this.handleClose}><Link to={routes.ORGANIZATION}>Organization</Link></MenuItem>
                 </Menu>
               </div>
             ) : (
@@ -120,13 +141,16 @@ class Header extends Component {
             )}
           </Toolbar>
         </AppBar>
-      </div>
+      </header>
     );
   }
 }
 
-Header.propTypes = {
+/**
+ * PropTypes for Navigation component.
+ */
+Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Header);
+export default withStyles(styles)(Navigation);

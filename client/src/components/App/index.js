@@ -6,9 +6,14 @@
 import React, { Component } from 'react';
 
 /**
- * You will need axios for API requests.
+ * Import the two named exports you will need to handler routing in React.
+ * Router is a react component that we will wrap the whole App component with,
+ * including Apollo's <Query> component, which gets data for the header.
+ *
+ * @todo - Refactor the Footer so that in can render on every page including the Loading and ErrorMessage.
+ * Have it not display user info until we get that from the query.
  */
-// import axios from 'axios';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 /**
  * Use this package to define your GraphQL query.
@@ -27,11 +32,16 @@ import Loading from '../Loading';
 import Error from '../Error';
 
 /**
+ * Import all routes from the routes.js file
+ */
+import * as routes from '../../constants/routes';
+
+/**
  * Import application React components
  */
-// import Organization from '../Organization';
+import Navigation from '../Navigation';
+import Organization from '../Organization';
 import Profile from '../Profile';
-import Header from '../Header';
 
 /**
  * Define your GraphQL query for this view.
@@ -46,45 +56,53 @@ const GET_HEADER_INFO = gql`
 `;
 
 /**
- * Static constant that doesn't change.
- */
-// const title = 'React GraphQL GitHub Client';
-
-/**
  * Base Component for your application
  *
  * Contains:
  * header and footer
+ * react-router-dom <Router> component
  */
 class App extends Component {
   render() {
+    /**
+     * We wrap our Query component in the Router. We need it for all the requests,
+     * so leave query wrapped around other JSX and React components.
+     *
+     * The navigation component won't need any data from the fetch, so it can go outside Query.
+     * @todo - Refactor so Navigation can use the viewer info.
+     */
     return (
-      <Query query={GET_HEADER_INFO}>
-        {({ data, loading, error }) => {
-          if (error) {
-            return <ErrorMessage error={error} />;
-          }
-
-          const { viewer } = data;
-
-          if (loading || !viewer) {
-            return <Loading />;
-          }
-
-          return (
-            <div className="app-container">
-              <Header viewer={viewer} />
-              <Profile />
-              <div className="footer-container">
-                <div className="app-info">
-                  <span className="app-info__name">App Name</span>
-                  <span className="app-info__short-description">App Short Description</span>
+      <Router>
+        <div className="app-container">
+          <Navigation />
+          <div className="main-container">
+            <Route
+              exact
+              path={routes.ORGANIZATION}
+              component={() => (
+                <div className="organization-container">
+                  <Organization />
                 </div>
+              )}
+            />
+            <Route
+              exact
+              path={routes.PROFILE}
+              component={() => (
+                <div className="profile-container">
+                  <Profile />
+                </div>
+              )}
+            />
+            <div className="footer-container">
+              <div className="app-info">
+                <span className="app-info__name">App Name</span>
+                <span className="app-info__short-description">App Short Description</span>
               </div>
             </div>
-          );
-        }}
-      </Query>
+          </div>
+        </div>
+      </Router>
     );
   }
 }

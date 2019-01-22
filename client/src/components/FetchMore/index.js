@@ -3,25 +3,34 @@ import React from 'react';
 /**
  * Import application components.
  */
-import { TextButton } from '../Button';
+import Loading from '../Loading';
+import { UnobtrusiveButton } from '../Button';
 
 const FetchMore = ({
+  loading,
+  hasNextPage,
   variables,
   updateQuery,
   fetchMore,
   children,
 }) => (
   <div className="fetch-more-container">
-    <TextButton
-      type="button"
-      className="button--secondary"
-      onClick={() => fetchMore({
-        variables,
-        updateQuery,
-      })}
-    >
-      More {children}
-    </TextButton>
+    {loading ? (
+      <Loading />
+    ) : (
+      hasNextPage && (
+        <UnobtrusiveButton
+          type="button"
+          className="button--secondary"
+          onClick={() => fetchMore({
+            variables,
+            updateQuery,
+          })}
+        >
+          More {children}
+        </UnobtrusiveButton>
+      )
+    )}
   </div>
 );
 

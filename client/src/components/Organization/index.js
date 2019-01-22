@@ -1,29 +1,21 @@
-// Even though it's a stateless, functional component, you still need react for the JSX
+/**
+ * Even though it's a stateless, functional component, you still need react for the JSX
+ */
 import React from 'react';
 
-import Repository from '../Repository/Repository';
+/**
+ * Import application components
+ */
+// Put your application components here
 
-const Organization = ({ organization, errors, onFetchMoreItems, onFavorite }) => {
-  if (errors) {
-    return (
-      <p>
-        Something went wrong:
-        {errors.map(error => error.message.join(' '))}
-      </p>
-    );
-  }
-
+/**
+ * Placeholder for organizaiton.
+ * @todo - Update and add structure/functionality
+ */
+const Organization = () => {
   return (
     <div>
-      <p>
-        Issues from Organization:&nbsp;
-        <a href={organization.url}>{organization.name}</a>
-      </p>
-      <Repository
-        repository={organization.repository}
-        onFetchMoreItems={onFetchMoreItems}
-        onFavorite={onFavorite}
-      />
+      Organization
     </div>
   );
 };
