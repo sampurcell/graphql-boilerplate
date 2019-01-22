@@ -58,12 +58,24 @@ const GET_USER_PROFILE = gql`
  * The JSX below will have access to the results.
  * This is based on the render props pattern of React.
  * API exposes a 'fetchMore' function in the response that can be used
- * in the button to fetchMore()
+ * in the button to fetchMore() repositories.
  *
+ * NOTE: The notifyOnNetworkStatusChange prop tells Profile to update when the network status changes.
+ * This is impt because it means there is another query being made to ApolloClient.
+ * It lets us asynchronously request more items and also trigger an update to the UI when there is a response.
+ *
+ * What to render?:
+ *
+ * If there's an error from renderProps, return the error message.
+ * Get the viewer from the data response.
+ * If its loading AND there's no viewer in data, return loading component.
+ * Otherwise, continue on (not loading anymore, or loading but no viewer)
  * @todo - Refactor the query and the one in App so it can be accessible in the header and here.
  */
 const Profile = () => (
-  <Query query={GET_USER_PROFILE}>
+  <Query query={GET_USER_PROFILE}
+    notifyOnNetworkStatusChange={true}
+  >
     {({ data, loading, error, fetchMore }) => {
       if (error) {
         return <ErrorMessage error={error} />;
@@ -71,15 +83,20 @@ const Profile = () => (
 
       const { viewer } = data;
 
-      if (loading || !viewer) {
+      if (loading && !viewer) {
         return <Loading />;
       }
 
+      /**
+       * If its loading but there is a viewer,
+       * it means its an AJAX call, and the new query is still out.
+       */
       return (
         <div className="profile-container">
           <div className="profile__body">
             <div className="profile__repos-">
               <RepositoryList
+                loading={loading}
                 repositories={viewer.repositories}
                 fetchMore={fetchMore}
               />

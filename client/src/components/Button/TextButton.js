@@ -4,11 +4,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// Import material-ui button for styles and function for css-in-js
+/**
+ * Import material-ui button for styles and function for css-in-js
+ */
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-// Import classNames utility to help with dynamic classNames.
+/**
+ * Import classNames utility to help with dynamic classNames.
+ */
 import classNames from 'classnames';
 
 /**
@@ -50,7 +54,7 @@ const TextButton = ({
         className={classNames(classes.root, className)}
         type={type}
         {...props}
-    >
+      >
         {children}
       </Button>
     </div>

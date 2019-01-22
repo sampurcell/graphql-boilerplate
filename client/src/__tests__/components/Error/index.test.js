@@ -15,7 +15,7 @@ import renderer from 'react-test-renderer';
 /**
  * Import the component you are testing.
  */
-import Item from '../../components/Item';
+import ErrorMessage from '../../../components/Error';
 
 /**
  * Configure Adapter to use Enzyme with React
@@ -29,15 +29,17 @@ Enzyme.configure({ adapter: new Adapter() });
  * @returns {Object} - Data to be used in App components tests
  */
 const setup = () => {
+  const error = new Error('This is an error message.');
+
   return {
-    content: "Foo Bar",
+    error
   };
 };
 
 /**
  * Create a describe block around the component you are testing.
  */
-describe('Item', () => {
+describe('RepositoryItem', () => {
   beforeAll(() => {
     console.log('You can run setup once before all tests in context.');
     console.log('You can do the same thing for teardown with afterAll().');
@@ -60,10 +62,10 @@ describe('Item', () => {
     });
 
     it('renders without crashing', () => {
-      const { item } = setup();
+      const { error } = setup();
       const div = document.createElement('div');
 
-      ReactDOM.render(<Item item={item}/>,div);
+      ReactDOM.render(<ErrorMessage error={error} />, div);
     });
   });
 
@@ -78,18 +80,26 @@ describe('Item', () => {
      * test() is an alias for it(), so its just for identifying snapshot tests in files easier.
      */
     test('has a valid snapshot', () => {
-      // Get test data.
-      const { item } = setup();
+      /**
+       * Get test data.
+       */
+      const { error } = setup();
 
-      // Render the component you are snapshot testing with props.
+      /**
+       * Render the component you are snapshot testing with props.
+       */
       const component = renderer.create(
-        <Item item={item} />,
+        <ErrorMessage error={error} />
       );
 
-      // Convert component render to JSON.
+      /**
+       * Convert component render to JSON.
+       */
       const tree = component.toJSON();
 
-      // Write your assertion for comparision with saved "image".
+      /**
+       * Write your assertion for comparision with saved "image".
+       */
       expect(tree).toMatchSnapshot();
     });
   });

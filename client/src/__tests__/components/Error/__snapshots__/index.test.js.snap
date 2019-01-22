@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RepositoryItem Snapshot tests has a valid snapshot 1`] = `
+<div
+  className="error-container"
+>
+  <p
+    className="error-message"
+  >
+    Error: This is an error message.
+  </p>
+</div>
+`;
