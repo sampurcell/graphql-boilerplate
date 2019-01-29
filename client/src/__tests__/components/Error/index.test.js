@@ -9,6 +9,7 @@ import Enzyme from 'enzyme';
 
 /**
  * Import renderer for snapshop test renders
+ * @todo - Figure out if this is still needed in React 16 from Constantinos
  */
 import renderer from 'react-test-renderer';
 
@@ -89,7 +90,7 @@ describe('RepositoryItem', () => {
        * Render the component you are snapshot testing with props.
        */
       const component = renderer.create(
-        <ErrorMessage error={error} />
+        <ErrorMessage {...error} />
       );
 
       /**

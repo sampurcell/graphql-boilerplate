@@ -46,14 +46,14 @@ import Profile from '../Profile';
 /**
  * Define your GraphQL query for this view.
  */
-const GET_HEADER_INFO = gql`
-  {
-    viewer {
-      login
-      name
-    }
-  }
-`;
+// const GET_HEADER_INFO = gql`
+//   {
+//     viewer {
+//       login
+//       name
+//     }
+//   }
+// `;
 
 /**
  * Base Component for your application
@@ -63,25 +63,41 @@ const GET_HEADER_INFO = gql`
  * react-router-dom <Router> component
  */
 class App extends Component {
-  render() {
+  state = {
+    organizationName: 'the-road-to-learn-react',
+  };
+
+  onOrganizationSearch = value => {
+    this.setState({ organizationName: value });
+  };
+
+  render = () => {
+    const { organizationName } = this.state;
+
     /**
      * We wrap our Query component in the Router. We need it for all the requests,
      * so leave query wrapped around other JSX and React components.
      *
      * The navigation component won't need any data from the fetch, so it can go outside Query.
      * @todo - Refactor so Navigation can use the viewer info.
+     * @todo - Refactor so Organization prop organization is dynamic.
      */
     return (
       <Router>
         <div className="app-container">
-          <Navigation />
+          <Navigation
+            organizationName={organizationName}
+            onOrganizationSearch={this.onOrganizationSearch}
+          />
           <div className="main-container">
             <Route
               exact
               path={routes.ORGANIZATION}
               component={() => (
                 <div className="organization-container">
-                  <Organization />
+                  <Organization
+                    organizationName={organizationName}
+                  />
                 </div>
               )}
             />

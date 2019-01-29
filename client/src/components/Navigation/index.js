@@ -5,10 +5,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @todo - Style this with MaterialUI
  * Handles links to external sources or to another component within the React app
+ * withRouter is an HOC that wraps your component and makes the current path accessible.
  */
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 /**
  * Import the classnames package for some support joining classnames.
@@ -31,16 +31,15 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 /**
- * Import routes here as well so Navigation component can display the links.
+ * Import your application components and routes as well.
+ * We need the routes so the Navigation component can display the links.
  */
 import * as routes from '../../constants/routes';
+import OrganizationSearch from '../Search';
 
 /**
  * Create some default styles
@@ -65,11 +64,22 @@ const styles = {
  * Its a dumb component for now.
  *
  * @todo - Refactor this in some way so it has access to the viewer data that is returned.
+ * @todo - Style component with MaterialUI
+ * @todo - Update MenuItem/Link stuff to follow best practices
  */
 class Navigation extends Component {
   /**
-   * Internal state for class. We don't need a constructor because of new ES syntax.
+   * Internal state for class. We don't need a constructor to set state or bind props now,
+   * because of new Javascript class properties proposal syntax.
    * isLoggedIn is always false until we access the viewer object.
+   *
+   * NOTE: You DON'T need to do anything in the constructor with class properties.
+   * State is set like this and accessed as this.state.
+   *
+   * You can access props immediately with this.props.<property>
+   * Define class instance methods as arroy functions.
+   * Define propTypes and defaultProps in the class @todo - Refactor this for the whole application
+   * No need to bind your class instance methods in the constructor anymore.
    */
   state = {
     isLoggedIn: true,
@@ -79,8 +89,8 @@ class Navigation extends Component {
   /**
    * Handle the menu state by updating what the anchor element is.
    */
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  handleMenu = e => {
+    this.setState({ anchorEl: e.currentTarget });
   };
 
   /**
@@ -91,7 +101,17 @@ class Navigation extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    /**
+     * Get the pathname now from the withRouter HOC from react-router.
+     * @todo - Figure out where these "classes come from".
+     * Read more about classnames, css-in-js and material-ui
+     */
+    const {
+      classes,
+      location: { pathname },
+      onOrganizationSearch,
+      organizationName
+    } = this.props;
     const { isLoggedIn, anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -105,6 +125,12 @@ class Navigation extends Component {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               Sam Purcell
             </Typography>
+            {pathname === routes.ORGANIZATION && (
+              <OrganizationSearch
+                organizationName={organizationName}
+                onOrganizationSearch={onOrganizationSearch}
+              />
+            )}
             {isLoggedIn ? (
               <div>
                 <IconButton
@@ -153,4 +179,12 @@ Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Navigation);
+/**
+ * With the withRouter and withStyles HOC's, we can wrap Navigation first,
+ * then wrap that in withRouter to export.
+ *
+ * Now this element will have the base styles that can be added to,
+ * and access to the history object and its data like pathname for the current URL.
+ *
+ */
+export default withRouter(withStyles(styles)(Navigation));

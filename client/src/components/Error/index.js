@@ -6,7 +6,7 @@ import React from 'react';
 const ErrorMessage = ({ error }) => {
   return (
     <div className="error-container">
-      <p className="error-message">{error.toString()}</p>
+      <p className="error-message">{error}</p>
     </div>
   );
 }

@@ -27,7 +27,7 @@ import RepositoryList, { REPOSITORY_FRAGMENT } from '../Repository';
  * then you use the fragment with the spread operator.
  *
  * Add a query function that takes a cursor variable,
- * that will be your new after prop for the repositories function in the qyer.
+ * that will be your new after prop for the repositories function in the query.
  */
 const GET_USER_PROFILE = gql`
   query($cursor: String) {
@@ -70,6 +70,12 @@ const GET_USER_PROFILE = gql`
  * Get the viewer from the data response.
  * If its loading AND there's no viewer in data, return loading component.
  * Otherwise, continue on (not loading anymore, or loading but no viewer)
+ *
+ * What is entry prop?:
+ *
+ * Thats a prop that is provided by ApolloClient. It tells the component,
+ * which should be co-located with some GraphQL, what the top level is to use for the query.
+ *
  * @todo - Refactor the query and the one in App so it can be accessible in the header and here.
  */
 const Profile = () => (
@@ -78,7 +84,7 @@ const Profile = () => (
   >
     {({ data, loading, error, fetchMore }) => {
       if (error) {
-        return <ErrorMessage error={error} />;
+        return <ErrorMessage {...error} />;
       }
 
       const { viewer } = data;
@@ -99,6 +105,7 @@ const Profile = () => (
                 loading={loading}
                 repositories={viewer.repositories}
                 fetchMore={fetchMore}
+                entry={'viewer'}
               />
             </div>
           </div>
