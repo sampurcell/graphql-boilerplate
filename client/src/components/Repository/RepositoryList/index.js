@@ -14,6 +14,7 @@ import Loading from '../../Loading';
  */
 import FetchMore from '../../FetchMore';
 import RepositoryItem from '../RepositoryItem';
+import Issues from '../../Issue';
 
 /**
  * Curried function is a helper for repository.
@@ -94,6 +95,10 @@ const RepositoryList = ({
           className="repo-item-container"
         >
           <RepositoryItem {...node} />
+          <Issues
+            repositoryName={node.name}
+            repositoryOwner={node.owner.login}
+          />
         </div>
       ))}
       <FetchMore
