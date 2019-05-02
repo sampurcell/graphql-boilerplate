@@ -17,6 +17,12 @@ import RepositoryItem from '../RepositoryItem';
 import Issues from '../../Issue';
 
 /**
+ * Import styles from material-ui
+ */
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+
+/**
  * Curried function is a helper for repository.
  *
  * Updates to previous updateQuery function, which lets Apollo know how to combine the queries.
@@ -65,6 +71,14 @@ const getUpdateQuery = entry => (
   };
 };
 
+/**
+ * Look more into how styledBy works.
+ */
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  }
+});
 
 /**
  * Use React's Fragment and the fetchMore function returned from mutation results.
@@ -82,38 +96,43 @@ const getUpdateQuery = entry => (
  * 4. Lastly, wrap the updateQuery prop value with a function that will decide what update query is needed.
  */
 const RepositoryList = ({
+  classes,
   repositories,
   loading,
   fetchMore,
   entry,
 }) => (
   <Fragment>
-    <div className="repos-container">
-      {repositories.edges.map(({ node }) => (
-        <div
-          key={node.id}
-          className="repo-item-container"
+    <div className={classes.root}>
+      <Grid container spacing={24}>
+        {repositories.edges.map(({ node }) => (
+          <Grid item xs={12} sm={6} md={3} >
+	          <div
+	            key={node.id}
+	            className="repo-item-container"
+	          >
+	            <RepositoryItem {...node} />
+	            <Issues
+	              repositoryName={node.name}
+	              repositoryOwner={node.owner.login}
+	            />
+	          </div>
+          </Grid>
+        ))}
+        <FetchMore
+          loading={loading}
+          hasNextPage={repositories.pageInfo.hasNextPage}
+          variables={{
+            cursor: repositories.pageInfo.endCursor,
+          }}
+          updateQuery={getUpdateQuery(entry)}
+          fetchMore={fetchMore}
         >
-          <RepositoryItem {...node} />
-          <Issues
-            repositoryName={node.name}
-            repositoryOwner={node.owner.login}
-          />
-        </div>
-      ))}
-      <FetchMore
-        loading={loading}
-        hasNextPage={repositories.pageInfo.hasNextPage}
-        variables={{
-          cursor: repositories.pageInfo.endCursor,
-        }}
-        updateQuery={getUpdateQuery(entry)}
-        fetchMore={fetchMore}
-      >
-        Repository
-      </FetchMore>
+          Repositories
+        </FetchMore>
+      </Grid>
     </div>
   </Fragment>
 );
 
-export default RepositoryList;
+export default withStyles(styles)(RepositoryList);

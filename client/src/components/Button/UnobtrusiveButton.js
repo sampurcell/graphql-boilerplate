@@ -27,11 +27,11 @@ const styledBy = (property, mapping) => props => mapping[props[property]];
 /**
  * Look more into how styledBy works.
  */
-const styles = () => ({
+const styles = theme => ({
   root: {
     color: styledBy('color', {
       defaultColor: '#333',
-    }),
+		}),
   }
 });
 
@@ -52,7 +52,8 @@ const UnobtrusiveButton = ({
     <div>
       <Button
         className={classNames(classes.root, className)}
-        type={type}
+				type={type}
+				variant='outlined'
         {...props}
       >
         {children}

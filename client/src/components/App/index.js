@@ -64,7 +64,7 @@ import Profile from '../Profile';
  */
 class App extends Component {
   state = {
-    organizationName: 'the-road-to-learn-react',
+    organizationName: 'soulcycle',
   };
 
   onOrganizationSearch = value => {

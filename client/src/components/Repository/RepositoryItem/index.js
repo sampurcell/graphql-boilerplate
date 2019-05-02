@@ -7,6 +7,13 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
 /**
+ * Import some material-ui style stuff
+ */
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import { Grade, GradeOutlined } from '@material-ui/icons';
+
+/**
  * Import application components.
  */
 import Link from '../../Link';
@@ -216,6 +223,17 @@ const updateWatch = (
   });
 };
 
+/**
+ * Create styles to inject
+ * @param {object} theme - UI theme
+ */
+const styles = () => ({
+  root: {
+		padding: 24,
+    textAlign: 'center',
+    color: '#333',
+  },
+});
 
 /**
  * These mutations are toggled and the UI is re-rendered again.
@@ -237,6 +255,7 @@ const updateWatch = (
  * 4. the expected value (true or false)
  */
 const RepositoryItem = ({
+	classes,
   id,
   name,
   url,
@@ -249,6 +268,7 @@ const RepositoryItem = ({
   viewerHasStarred,
 }) => {
   return (
+		<Paper className={classes.paper}>
     <div className="repo-item">
       <h2>
         <Link href={url} text={name || "View Link"} />
@@ -301,7 +321,8 @@ const RepositoryItem = ({
                 className="button button--secondary"
                 onClick={removeStar}
               >
-                {stargazers.totalCount} Unstar
+                <Grade />
+                Unstar {stargazers.totalCount}
               </TextButton>
             )}
           </Mutation>
@@ -315,7 +336,8 @@ const RepositoryItem = ({
                 className="button button--secondary"
                 onClick={addStar}
               >
-                {stargazers.totalCount} Star
+								<GradeOutlined />
+                Star {stargazers.totalCount}
               </TextButton>
             )}
           </Mutation>
@@ -342,7 +364,8 @@ const RepositoryItem = ({
         </div>
       </div>
     </div>
+		</Paper>
   );
 };
 
-export default RepositoryItem;
+export default withStyles(styles)(RepositoryItem);
